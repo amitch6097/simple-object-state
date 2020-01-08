@@ -1,15 +1,13 @@
 {
   "name": "simple-object-state",
   "author": "Andrew Mitchell",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "keywords": [],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "",
-    "prepare": "tsc",
-    "publish": "npm run test && npm publish"
+    "build": "tsc"
   },
   "declaration": true,
   "devDependencies": {
