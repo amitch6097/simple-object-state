@@ -36,8 +36,9 @@ export class SimpleStore<State, StoreClass extends Store<State>> {
   }
 
   public subscribe(callback: SOSTypes.ListenerCallback<State>) {
-    this.create();
     this.Listeners.push(callback);
+    this.create();
+    callback(this.getState());
   }
 
   public unsubscribe(callback: SOSTypes.ListenerCallback<State>): void {
