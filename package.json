@@ -1,0 +1,14 @@
+{
+  "name": "simple-object-store",
+  "author": "Andrew Mitchell",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "main": "src/index.js",
+  "types": "dist/index.d.ts",
+  "devDependencies": {
+    "typescript": "3.7.4"
+  },
+  "browserslist": [">0.2%", "not dead", "not ie <= 11", "not op_mini all"],
+  "license": "ISC"
+}

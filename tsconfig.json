@@ -1,0 +1,18 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "declaration": true,
+    "module": "CommonJS",
+    "outDir": "dist",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
+    "target": "ES2017"
+  }
+}
