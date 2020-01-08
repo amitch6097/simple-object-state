@@ -4,8 +4,14 @@
   "version": "1.0.0",
   "description": "",
   "keywords": [],
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "",
+    "prepare": "tsc",
+    "publish": "npm run test && npm publish"
+  },
+  "declaration": true,
   "devDependencies": {
     "typescript": "3.7.4"
   },
