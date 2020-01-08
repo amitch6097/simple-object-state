@@ -11,6 +11,14 @@ export class SimpleStore<State, StoreClass extends Store<State>> {
     this.Listeners = [];
   }
 
+  public destructor() {
+    if (this.Instance) {
+      this.Instance.destructor();
+      this.Instance = undefined;
+      this.Listeners = [];
+    }
+  }
+
   private create(): StoreClass {
     if (!this.Instance) {
       this.Instance = new this.Class();
@@ -18,16 +26,19 @@ export class SimpleStore<State, StoreClass extends Store<State>> {
     return this.Instance;
   }
 
-  private destory() {
-    this.Instance = undefined;
-  }
-
   public getInstance(): StoreClass {
     return this.create();
   }
 
   public onSetState() {
-    this.Listeners.forEach(callback => callback(this.getState()));
+    this.Listeners.forEach(callback => {
+      if (callback) {
+        callback(this.getState());
+      } else {
+        // maybe they forgot to unsubscribe
+        this.unsubscribe(callback);
+      }
+    });
   }
 
   public getState(): State {

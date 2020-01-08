@@ -32,6 +32,22 @@ class SimpleObjectStore {
     }
   }
 
+  public register = <StoreClass extends Store<State>, State>(
+    Class: SOSTypes.Class<StoreClass>
+  ) => {
+    const store = this.addStoreByClass(Class);
+    return store;
+  };
+
+  public unregister = <StoreClass extends Store<State>, State>(
+    Class: SOSTypes.Class<StoreClass>
+  ) => {
+    if (this.Stores[classStoreName(Class)]) {
+      const store = this.Stores[classStoreName(Class)];
+      store.destructor();
+    }
+  };
+
   public onSetState = <StoreClass extends Store<State>, State>(
     This: StoreClass
   ) => {
@@ -84,8 +100,4 @@ class SimpleObjectStore {
 }
 
 const simpleObjectStore = new SimpleObjectStore();
-export const subscribe = simpleObjectStore.subscribe;
-export const unsubscribe = simpleObjectStore.unsubscribe;
-export const onSetState = simpleObjectStore.onSetState;
-export const getStoreByClass = simpleObjectStore.getStoreByClass;
 export { simpleObjectStore as SimpleObjectStore };

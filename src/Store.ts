@@ -7,6 +7,8 @@ export class Store<State> {
     this.state = {} as State;
   }
 
+  destructor() {}
+
   public getState(): State {
     return this.state;
   }
