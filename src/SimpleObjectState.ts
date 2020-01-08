@@ -75,6 +75,13 @@ import {
       store.unsubscribe(callback);
     };
   
+  
+    public getClassByString = <StoreClass extends Store<State>, State>(name: string): ClassConstructor<StoreClass> | undefined => {
+      if (this.Stores[name]) {
+        return this.Stores[name].Class;
+      }
+    };
+  
     public getStoreByString = <StoreClass extends Store<State>, State>(name: string): StoreClass | undefined => {
       if (this.Stores[name]) {
         return this.Stores[name].getInstance();
