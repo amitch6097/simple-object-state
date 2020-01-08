@@ -77,5 +77,7 @@ class SimpleObjectStore {
 
 const simpleObjectStore = new SimpleObjectStore();
 export const subscribe = simpleObjectStore.subscribe;
+export const unsubscribe = simpleObjectStore.unsubscribe;
 export const onSetState = simpleObjectStore.onSetState;
+export const getStoreByClass = simpleObjectStore.getStoreByClass;
 export { simpleObjectStore as SimpleObjectStore };
