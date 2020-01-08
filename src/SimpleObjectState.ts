@@ -1,4 +1,8 @@
-import { SimpleObjectStateStoreWrapper } from "./SimpleObjectStateStoreWrapper";
+import {
+  SimpleObjectStateStoreWrapper,
+  Class,
+  ListenerCallback
+} from "./SimpleObjectStateStoreWrapper";
 import { Store } from "./Store";
 
 declare var window: {
@@ -6,7 +10,7 @@ declare var window: {
 };
 
 function classStoreName<StoreClass extends Store<State>, State>(
-  Class: SOSTypes.Class<StoreClass>
+  Class: Class<StoreClass>
 ) {
   return Class.name;
 }
@@ -33,14 +37,14 @@ class SimpleObjectState {
   }
 
   public register = <StoreClass extends Store<State>, State>(
-    Class: SOSTypes.Class<StoreClass>
+    Class: Class<StoreClass>
   ) => {
     const store = this.addStoreByClass(Class);
     return store;
   };
 
   public unregister = <StoreClass extends Store<State>, State>(
-    Class: SOSTypes.Class<StoreClass>
+    Class: Class<StoreClass>
   ) => {
     if (this.Stores[classStoreName(Class)]) {
       const store = this.Stores[classStoreName(Class)];
@@ -56,16 +60,16 @@ class SimpleObjectState {
   };
 
   public subscribe = <StoreClass extends Store<State>, State>(
-    Class: SOSTypes.Class<StoreClass>,
-    callback: SOSTypes.ListenerCallback<State>
+    Class: Class<StoreClass>,
+    callback: ListenerCallback<State>
   ) => {
     const store = this.addStoreByClass(Class);
     store.subscribe(callback);
   };
 
   public unsubscribe = <StoreClass extends Store<State>, State>(
-    Class: SOSTypes.Class<StoreClass>,
-    callback: SOSTypes.ListenerCallback<State>
+    Class: Class<StoreClass>,
+    callback: ListenerCallback<State>
   ) => {
     const store = this.addStoreByClass(Class);
     store.unsubscribe(callback);
@@ -78,7 +82,7 @@ class SimpleObjectState {
   };
 
   public getStoreByClass = <StoreClass extends Store<State>, State>(
-    Class: SOSTypes.Class<StoreClass>
+    Class: Class<StoreClass>
   ) => {
     if (this.Stores[classStoreName(Class)]) {
       return this.Stores[classStoreName(Class)].getInstance();
@@ -94,7 +98,7 @@ class SimpleObjectState {
   };
 
   private addStoreByClass<StoreClass extends Store<State>, State>(
-    Class: SOSTypes.Class<StoreClass>
+    Class: Class<StoreClass>
   ) {
     if (!this.Stores[classStoreName(Class)]) {
       this.Stores[classStoreName(Class)] = new SimpleObjectStateStoreWrapper<

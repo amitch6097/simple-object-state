@@ -1,14 +1,15 @@
 import { Store } from "./Store";
-
+export type ListenerCallback<State> = (state: State) => void;
+export type Class<Type> = new () => Type;
 export class SimpleObjectStateStoreWrapper<
   State,
   StoreClass extends Store<State>
 > {
-  Class: SOSTypes.Class<StoreClass>;
-  Listeners: Array<SOSTypes.ListenerCallback<State>>;
+  Class: Class<StoreClass>;
+  Listeners: Array<ListenerCallback<State>>;
   Instance: StoreClass | undefined;
 
-  constructor(Class: SOSTypes.Class<StoreClass>) {
+  constructor(Class: Class<StoreClass>) {
     this.Instance;
     this.Class = Class;
     this.Listeners = [];
@@ -49,13 +50,13 @@ export class SimpleObjectStateStoreWrapper<
     return instance.getState();
   }
 
-  public subscribe(callback: SOSTypes.ListenerCallback<State>) {
+  public subscribe(callback: ListenerCallback<State>) {
     this.Listeners.push(callback);
     this.create();
     callback(this.getState());
   }
 
-  public unsubscribe(callback: SOSTypes.ListenerCallback<State>): void {
+  public unsubscribe(callback: ListenerCallback<State>): void {
     if (!this.Instance) {
       return;
     }
