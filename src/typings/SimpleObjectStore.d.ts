@@ -1,5 +1,5 @@
-import Store from "../Store";
-import SimpleStore from "../SimpleStore";
+import { Store } from "../Store";
+import { SimpleStore } from "../SimpleStore";
 
 export = SOSTypes;
 export as namespace SOSTypes;
