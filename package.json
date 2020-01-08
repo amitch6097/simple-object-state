@@ -2,17 +2,24 @@
   "name": "simple-object-state",
   "author": "Andrew Mitchell",
   "version": "1.0.3",
-  "description": "",
-  "keywords": [],
+  "description": "An experiemental object oriented state mangment lib",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amitch6097/simple-object-state.git"
+  },
+  "bugs": {
+    "url": "https://github.com/amitch6097/simple-object-state/issues"
+  },
+  "homepage": "https://github.com/amitch6097/simple-object-state#readme",
+  "keywords": ["simple", "object", "state", "typescript"],
   "declaration": true,
   "devDependencies": {
     "typescript": "3.7.4"
   },
-  "browserslist": [">0.2%", "not dead", "not ie <= 11", "not op_mini all"],
   "license": "ISC"
 }
