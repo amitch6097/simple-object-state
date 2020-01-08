@@ -1,8 +1,8 @@
-import { SimpleStore } from "./SimpleStore";
+import { SimpleObjectStateStoreWrapper } from "./SimpleObjectStateStoreWrapper";
 import { Store } from "./Store";
 
 declare var window: {
-  SimpleObjectStore: SimpleObjectStore;
+  SimpleObjectState: SimpleObjectState;
 };
 
 function classStoreName<StoreClass extends Store<State>, State>(
@@ -16,19 +16,19 @@ function thisStoreName<StoreClass extends Store<State>, State>(
   return This.constructor.name;
 }
 
-class SimpleObjectStore {
-  static Instance: SimpleObjectStore;
-  private Stores: Record<string, SimpleStore<any, any>> = {};
+class SimpleObjectState {
+  static Instance: SimpleObjectState;
+  private Stores: Record<string, SimpleObjectStateStoreWrapper<any, any>> = {};
 
   constructor() {
-    if (window.SimpleObjectStore) {
-      SimpleObjectStore.Instance = window.SimpleObjectStore;
-      return SimpleObjectStore.Instance;
+    if (window.SimpleObjectState) {
+      SimpleObjectState.Instance = window.SimpleObjectState;
+      return SimpleObjectState.Instance;
     }
-    if (!SimpleObjectStore.Instance) {
-      SimpleObjectStore.Instance = this;
+    if (!SimpleObjectState.Instance) {
+      SimpleObjectState.Instance = this;
       //@ts-ignore
-      window.SimpleObjectStore = this;
+      window.SimpleObjectState = this;
     }
   }
 
@@ -72,32 +72,39 @@ class SimpleObjectStore {
   };
 
   public getStoreByString = (name: string) => {
-    return this.Stores[name];
+    if (this.Stores[name]) {
+      return this.Stores[name].getInstance();
+    }
   };
 
   public getStoreByClass = <StoreClass extends Store<State>, State>(
     Class: SOSTypes.Class<StoreClass>
   ) => {
-    return this.Stores[classStoreName(Class)];
+    if (this.Stores[classStoreName(Class)]) {
+      return this.Stores[classStoreName(Class)].getInstance();
+    }
   };
 
   public getStoreByInstance = <StoreClass extends Store<State>, State>(
     This: StoreClass
   ) => {
-    return this.Stores[thisStoreName(This)];
+    if (this.Stores[thisStoreName(This)]) {
+      return this.Stores[thisStoreName(This)].getInstance();
+    }
   };
 
   private addStoreByClass<StoreClass extends Store<State>, State>(
     Class: SOSTypes.Class<StoreClass>
   ) {
     if (!this.Stores[classStoreName(Class)]) {
-      this.Stores[classStoreName(Class)] = new SimpleStore<State, StoreClass>(
-        Class
-      );
+      this.Stores[classStoreName(Class)] = new SimpleObjectStateStoreWrapper<
+        State,
+        StoreClass
+      >(Class);
     }
     return this.Stores[classStoreName(Class)];
   }
 }
 
-const simpleObjectStore = new SimpleObjectStore();
-export { simpleObjectStore as SimpleObjectStore };
+const simpleObjectState = new SimpleObjectState();
+export { simpleObjectState as SimpleObjectState };

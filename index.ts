@@ -1,2 +1,2 @@
-export { SimpleObjectStore } from "./src/SimpleObjectStore";
+export { SimpleObjectState } from "./src/SimpleObjectState";
 export { Store } from "./src/Store";
