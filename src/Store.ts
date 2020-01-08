@@ -7,7 +7,9 @@ export class Store<State> {
     this.state = {} as State;
   }
 
-  destructor() {}
+  destructor() {
+      return;
+  }
 
   public getState(): State {
     return this.state;

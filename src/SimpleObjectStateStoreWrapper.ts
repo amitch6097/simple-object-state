@@ -1,16 +1,15 @@
 import { Store } from "./Store";
 export type ListenerCallback<State> = (state: State) => void;
-export type Class<Type> = new () => Type;
+export type ClassConstructor<Type> = new () => Type;
 export class SimpleObjectStateStoreWrapper<
   State,
   StoreClass extends Store<State>
 > {
-  Class: Class<StoreClass>;
+  Class: ClassConstructor<StoreClass>;
   Listeners: Array<ListenerCallback<State>>;
   Instance: StoreClass | undefined;
 
-  constructor(Class: Class<StoreClass>) {
-    this.Instance;
+  constructor(Class: ClassConstructor<StoreClass>) {
     this.Class = Class;
     this.Listeners = [];
   }
@@ -30,19 +29,21 @@ export class SimpleObjectStateStoreWrapper<
     return this.Instance;
   }
 
-  public getInstance(): StoreClass {
+  public getInstance(): StoreClass | undefined {
     return this.create();
   }
 
   public onSetState() {
-    this.Listeners.forEach(callback => {
-      if (callback) {
-        callback(this.getState());
-      } else {
-        // maybe they forgot to unsubscribe
-        this.unsubscribe(callback);
-      }
-    });
+    if (this.Instance) {
+        this.Listeners.forEach(callback => {
+        if (callback) {
+            callback(this.getState());
+        } else {
+            // maybe they forgot to unsubscribe
+            this.unsubscribe(callback);
+        }
+        });
+    }
   }
 
   public getState(): State {
