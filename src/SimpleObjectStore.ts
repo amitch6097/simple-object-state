@@ -13,7 +13,7 @@ function thisStoreName<StoreClass extends Store<State>, State>(
 }
 
 class SimpleObjectStore {
-  static Instance;
+  static Instance: SimpleObjectStore;
   private Stores: Record<string, SimpleStore<any, any>> = {};
 
   constructor() {

@@ -1,9 +1,5 @@
 {
   "compileOnSave": true,
-  "exclude": [
-    "node_modules",
-    "dist"
-  ],
   "compilerOptions": {
     "alwaysStrict": true,
     "declaration": true,
@@ -16,6 +12,10 @@
     "lib": [
       "ESNext",
       "DOM"
+    ],
+    "exclude": [
+      "node_modules",
+      "dist"
     ],
     "target": "ES2017"
   }

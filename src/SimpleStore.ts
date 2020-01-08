@@ -5,7 +5,7 @@ export class SimpleStore<State, StoreClass extends Store<State>> {
   Listeners: Array<SOSTypes.ListenerCallback<State>>;
   Instance: StoreClass;
 
-  constructor(Class) {
+  constructor(Class: SOSTypes.Class<StoreClass>) {
     this.Instance;
     this.Class = Class;
     this.Listeners = [];
