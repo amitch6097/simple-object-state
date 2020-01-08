@@ -1,4 +1,4 @@
-import { onSetState } from "./SimpleObjectStore";
+import { SimpleObjectStore } from "./SimpleObjectStore";
 
 export class Store<State> {
   protected state: State;
@@ -18,6 +18,6 @@ export class Store<State> {
       ...this.state,
       ...state
     };
-    onSetState<Store<State>, State>(this);
+    SimpleObjectStore.onSetState<Store<State>, State>(this);
   }
 }
