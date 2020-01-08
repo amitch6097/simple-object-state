@@ -1,7 +1,7 @@
 {
   "name": "simple-object-state",
   "author": "Andrew Mitchell",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "An experiemental object oriented state mangment lib",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

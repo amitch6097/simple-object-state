@@ -9,11 +9,18 @@ export class SimpleObjectStateStoreWrapper<
   Listeners: Array<ListenerCallback<State>>;
   Instance: StoreClass | undefined;
 
+
+  /**
+   * Initalize with the Class of the Store, we will setup the
+   * store itself later with .Instance and .create()
+   */
   constructor(Class: ClassConstructor<StoreClass>) {
     this.Class = Class;
     this.Listeners = [];
   }
 
+
+  /** Just remove the instance, keep the class as we might re-instantiate */
   public destructor() {
     if (this.Instance) {
       this.Instance.destructor();
@@ -21,6 +28,11 @@ export class SimpleObjectStateStoreWrapper<
       this.Listeners = [];
     }
   }
+
+  /**
+   * Actually setup the store, at this point we would want
+   * the stores state to be changing on subscribed to
+   */
 
   private create(): StoreClass {
     if (!this.Instance) {
