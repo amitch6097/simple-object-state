@@ -1,6 +1,9 @@
 import { Store } from "./Store";
 
-export class SimpleStore<State, StoreClass extends Store<State>> {
+export class SimpleObjectStateStoreWrapper<
+  State,
+  StoreClass extends Store<State>
+> {
   Class: SOSTypes.Class<StoreClass>;
   Listeners: Array<SOSTypes.ListenerCallback<State>>;
   Instance: StoreClass | undefined;
