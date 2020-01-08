@@ -1,6 +1,10 @@
 import { SimpleStore } from "./SimpleStore";
 import { Store } from "./Store";
 
+declare var window: {
+  SimpleObjectStore: SimpleObjectStore;
+};
+
 function classStoreName<StoreClass extends Store<State>, State>(
   Class: SOSTypes.Class<StoreClass>
 ) {
@@ -17,6 +21,10 @@ class SimpleObjectStore {
   private Stores: Record<string, SimpleStore<any, any>> = {};
 
   constructor() {
+    if (window.SimpleObjectStore) {
+      SimpleObjectStore.Instance = window.SimpleObjectStore;
+      return SimpleObjectStore.Instance;
+    }
     if (!SimpleObjectStore.Instance) {
       SimpleObjectStore.Instance = this;
       //@ts-ignore
