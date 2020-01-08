@@ -3,7 +3,7 @@ import { Store } from "./Store";
 export class SimpleStore<State, StoreClass extends Store<State>> {
   Class: SOSTypes.Class<StoreClass>;
   Listeners: Array<SOSTypes.ListenerCallback<State>>;
-  Instance: StoreClass;
+  Instance: StoreClass | undefined;
 
   constructor(Class: SOSTypes.Class<StoreClass>) {
     this.Instance;
@@ -11,14 +11,11 @@ export class SimpleStore<State, StoreClass extends Store<State>> {
     this.Listeners = [];
   }
 
-  public destructor() {
-    this.Class = undefined;
-    this.Instance = undefined;
-    this.Listeners = [];
-  }
-
-  private create() {
-    this.Instance = new this.Class();
+  private create(): StoreClass {
+    if (!this.Instance) {
+      this.Instance = new this.Class();
+    }
+    return this.Instance;
   }
 
   private destory() {
@@ -26,7 +23,7 @@ export class SimpleStore<State, StoreClass extends Store<State>> {
   }
 
   public getInstance(): StoreClass {
-    return this.Instance;
+    return this.create();
   }
 
   public onSetState() {
@@ -34,16 +31,12 @@ export class SimpleStore<State, StoreClass extends Store<State>> {
   }
 
   public getState(): State {
-    if (!this.Instance) {
-      this.create();
-    }
-    return this.Instance.getState();
+    const instance = this.create();
+    return instance.getState();
   }
 
   public subscribe(callback: SOSTypes.ListenerCallback<State>) {
-    if (!this.Instance) {
-      this.create();
-    }
+    this.create();
     this.Listeners.push(callback);
   }
 

@@ -24,15 +24,6 @@ class SimpleObjectStore {
     }
   }
 
-  destructor() {
-    const keys = Object.keys(this.Stores);
-    if (keys && keys.length) {
-      keys.forEach(key => {
-        this.Stores[key].destructor();
-      });
-    }
-  }
-
   public onSetState = <StoreClass extends Store<State>, State>(
     This: StoreClass
   ) => {
