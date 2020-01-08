@@ -13,10 +13,6 @@
       "ESNext",
       "DOM"
     ],
-    "exclude": [
-      "node_modules",
-      "dist"
-    ],
     "target": "ES2017"
   }
 }
