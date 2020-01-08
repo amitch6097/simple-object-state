@@ -55,8 +55,8 @@ import {
     public onSetState = <StoreClass extends Store<State>, State>(
       This: StoreClass
     ) => {
-      const store = this.getStoreByInstance<StoreClass, State>(This);
-      store.onSetState();
+      const wrapper = this.Stores[thisStoreName(This)];
+      wrapper.onSetState();
     };
   
     public subscribe = <StoreClass extends Store<State>, State>(
@@ -75,7 +75,7 @@ import {
       store.unsubscribe(callback);
     };
   
-    public getStoreByString = (name: string) => {
+    public getStoreByString = <StoreClass extends Store<State>, State>(name: string): StoreClass | undefined => {
       if (this.Stores[name]) {
         return this.Stores[name].getInstance();
       }
@@ -83,7 +83,7 @@ import {
   
     public getStoreByClass = <StoreClass extends Store<State>, State>(
       Class: ClassConstructor<StoreClass>
-    ) => {
+    ): StoreClass | undefined => {
       if (this.Stores[classStoreName(Class)]) {
         return this.Stores[classStoreName(Class)].getInstance();
       }
@@ -91,7 +91,7 @@ import {
   
     public getStoreByInstance = <StoreClass extends Store<State>, State>(
       This: StoreClass
-    ) => {
+    ): StoreClass | undefined => {
       if (this.Stores[thisStoreName(This)]) {
         return this.Stores[thisStoreName(This)].getInstance();
       }
