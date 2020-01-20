@@ -5,8 +5,10 @@
   "description": "An experiemental object oriented state mangment lib",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "module": "dist/index.es.js",
+  "jsnext:main": "dist/index.es.js",
   "scripts": {
-    "build": "cross-env NODE_PATH=./node_modules webpack --config webpack.config.js"
+    "build": "rollup -c"
   },
   "repository": {
     "type": "git",
@@ -15,21 +17,28 @@
   "bugs": {
     "url": "https://github.com/amitch6097/simple-object-state/issues"
   },
+  "files": [
+    "dist"
+  ],
   "browserslist": [
     ">0.2%",
     "not dead"
-],
+  ],
   "homepage": "https://github.com/amitch6097/simple-object-state#readme",
-  "keywords": ["simple", "object", "state", "typescript"],
+  "keywords": [
+    "simple",
+    "object",
+    "state",
+    "typescript"
+  ],
   "declaration": true,
   "devDependencies": {
-    "typescript": "3.7.4",
-    "@babel/core": "^7.6.4",
-    "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
-    "@babel/polyfill": "^7.6.0",
-    "@babel/preset-env": "^7.6.3",
-    "webpack": "^4.41.2"
+    "rollup": "^1.29.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-peer-deps-external": "^2.2.0",
+    "rollup-plugin-typescript2": "^0.25.3",
+    "typescript": "^3.7.5"
   },
   "license": "ISC"
 }
