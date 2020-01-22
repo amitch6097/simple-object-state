@@ -40,11 +40,9 @@ class SimpleObjectState {
   static Instance: SimpleObjectState;
   private Stores: Record<string, SimpleObjectStateStoreWrapper<any, any>> = {};
   private debug: boolean;
-  private debugUpdateStack: any[];
 
   constructor() {
     this.debug = false;
-    this.debugUpdateStack = [];
 
     if (window.SimpleObjectState) {
       SimpleObjectState.Instance = window.SimpleObjectState;
@@ -59,24 +57,6 @@ class SimpleObjectState {
   /** Sets debug mode where a stack will be built of state updates */
   public setDebug(value: boolean) {
     this.debug = value;
-  }
-
-  /** clears the debug stack */
-  public clearDebugStack() {
-    if (this.debug) {
-        return this.debugUpdateStack = [];
-    } else {
-        console.error("Debug mode is not set!")
-    }
-  }
-
-  /** gets the debug stack in debug mode */
-  public getDebugStack() {
-      if (this.debug) {
-          return console.log(this.debugUpdateStack.reverse());
-      } else {
-          console.error("Debug mode is not set!")
-      }
   }
 
   /** Returns the Store Instance if one */
@@ -159,11 +139,15 @@ class SimpleObjectState {
     This: StoreClass
   ) => {
     if (this.debug) {
-      this.debugUpdateStack.push({
-        store: This.constructor.name,
-        state: This.getState(),
-        stack: console.trace()
-      });
+      console.groupCollapsed(
+        `SimpleObjectState State Update - ${This.constructor.name}`
+      );
+      console.log("Store -", This);
+      console.log("New State -", This.getState());
+      console.groupCollapsed('Stack Trace');
+      console.trace(); // hidden in collapsed group
+      console.groupEnd();
+      console.groupEnd();
     }
     const wrapper = this.Stores[instanceStoreName(This)];
     wrapper.onSetState();
