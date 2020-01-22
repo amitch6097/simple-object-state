@@ -1,4 +1,5 @@
 import { Store } from "./Store";
+
 export type ListenerCallback<State> = (state: State) => void;
 export type ClassConstructor<Type> = new () => Type;
 export class SimpleObjectStateStoreWrapper<
