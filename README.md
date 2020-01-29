@@ -64,28 +64,35 @@ class CounterStore extends Store<ICounterStoreState> {
 // registers the store with SimpleObject State, this will not create the store yet
 register(CounterStore);
 
+const store = getStore<CounterStore, ICounterStoreState>(CounterStore);
+console.log("Store is now ready for updates.", store.getState());
+
+store.increment();
+// count state is now at 1!
+
+// subscribes the printCount function to updates of the store
 function printCount(state: ICounterStoreState) {
   console.log("count:", state.count);
 }
-
-// subscribes the printCount function to updates of the store, and since this is the first subscription the store will be created
 subscribe(CounterStore, printCount);
 
-// retrive the store and update the state
-const store = getStore<CounterStore, ICounterStoreState>(CounterStore);
+// again update the state of store, but this time we subscribed so updates will be printed to the console
 store.increment();
-// count: 1
+// count: 2
 store.decrement();
-// count: 0
-store.increment();
 // count: 1
+store.increment();
+// count: 2
 
 // unsubscribing from the store will remove the call to console.log on store updates, but still update the state
 unsubscribe(CounterStore, printCount);
 
-// this will stil update the state of the store, so the count will be 2
-store.increment();
+// this will stil update the state of the store
+store.decrement();
+console.log("Store can still be updated.", store.getState()); // state will be 1
 
-// unregistering the store will will remove its instance
+// unregistering the store will will remove its instance and call destructor()
 unregister(CounterStore);
 ```
+
+check it out here [CodeSandbox](https://codesandbox.io/s/serene-gauss-1cuk6)
