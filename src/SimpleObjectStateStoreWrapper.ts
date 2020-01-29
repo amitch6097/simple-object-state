@@ -67,7 +67,6 @@ export class SimpleObjectStateStoreWrapper<
   public subscribe(callback: ListenerCallback<State>) {
     this.Listeners.push(callback);
     this.create();
-    callback(this.getState());
   }
 
   public unsubscribe(callback: ListenerCallback<State>): void {
