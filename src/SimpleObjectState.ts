@@ -106,6 +106,7 @@ class SimpleObjectState {
     if (this.Stores[classStoreName(Class)]) {
       const store = this.Stores[classStoreName(Class)];
       store.destructor();
+      delete this.Stores[classStoreName(Class)]
     }
   };
 
@@ -175,9 +176,8 @@ class SimpleObjectState {
     const storeString = this.getString(ref);
     if (storeString) {
       return this.Stores[storeString];
-    } else if (isClass(ref)) {
-      /** If it is a class we can actually register it */
-      return this.register(ref as ClassConstructor<StoreClass>);
+    } else {
+        console.warn('Store has not been registered')
     }
   };
 

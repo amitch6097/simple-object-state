@@ -18,6 +18,7 @@ export class SimpleObjectStateStoreWrapper<
   constructor(Class: ClassConstructor<StoreClass>) {
     this.Class = Class;
     this.Listeners = [];
+    this.create();
   }
 
 
