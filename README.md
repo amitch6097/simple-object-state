@@ -61,7 +61,7 @@ class CounterStore extends Store<ICounterStoreState> {
   }
 }
 
-// registers the store with SimpleObject State, this will not create the store yet
+// registers the store with SimpleObject State, this will create the store
 register(CounterStore);
 
 const store = getStore<CounterStore, ICounterStoreState>(CounterStore);
