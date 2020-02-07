@@ -3,12 +3,14 @@ import { Store } from "./Store";
 export type ListenerCallback<State> = (state: State) => void;
 export type ClassConstructor<Type> = new () => Type;
 export class SimpleObjectStateStoreWrapper<
+  StoreClass extends Store<State, Actions>,
   State,
-  StoreClass extends Store<State>
+  Actions,
 > {
   Class: ClassConstructor<StoreClass>;
   Listeners: Array<ListenerCallback<State>>;
   Instance: StoreClass | undefined;
+  private isCreatedThroughSub: boolean;
 
 
   /**
@@ -18,7 +20,7 @@ export class SimpleObjectStateStoreWrapper<
   constructor(Class: ClassConstructor<StoreClass>) {
     this.Class = Class;
     this.Listeners = [];
-    this.create();
+    this.isCreatedThroughSub = false;
   }
 
 
@@ -28,6 +30,7 @@ export class SimpleObjectStateStoreWrapper<
       this.Instance.destructor();
       this.Instance = undefined;
       this.Listeners = [];
+      this.isCreatedThroughSub = false;
     }
   }
 
@@ -36,15 +39,22 @@ export class SimpleObjectStateStoreWrapper<
    * the stores state to be changing on subscribed to
    */
 
-  private create(): StoreClass {
+  public create(): StoreClass {
     if (!this.Instance) {
       this.Instance = new this.Class();
     }
+    this.isCreatedThroughSub = false;
     return this.Instance;
   }
 
   public getInstance(): StoreClass | undefined {
-    return this.create();
+    return this.Instance;
+  }
+
+  public callAction(action: string, args: any) {
+    if (this.Instance) {
+        this.Instance.callAction(action, args);
+    }
   }
 
   public onSetState() {
@@ -61,13 +71,22 @@ export class SimpleObjectStateStoreWrapper<
   }
 
   public getState(): State {
-    const instance = this.create();
-    return instance.getState();
+    const instance = this.getInstance() as StoreClass;
+    if (instance) {
+        return instance.getState();
+    } else {
+        console.warn('no instance setup yet!')
+    }
+    return {} as State
   }
 
   public subscribe(callback: ListenerCallback<State>) {
     this.Listeners.push(callback);
+    const hadInstanceBeforeCreate = Boolean(this.Instance);
     this.create();
+    if(!hadInstanceBeforeCreate) {
+        this.isCreatedThroughSub = true;
+    }
   }
 
   public unsubscribe(callback: ListenerCallback<State>): void {
@@ -83,5 +102,8 @@ export class SimpleObjectStateStoreWrapper<
     }
     nextListeners = [...nextListeners, ...listeners];
     this.Listeners = nextListeners;
+    if (this.isCreatedThroughSub && !this.Listeners.length) {
+        this.destructor();
+    }   
   }
 }

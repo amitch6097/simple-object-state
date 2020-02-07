@@ -23,14 +23,18 @@ function isString(ref: any): boolean {
   return typeof ref === "string";
 }
 
-function classStoreName<StoreClass extends Store<State>, State>(
-  Class: ClassConstructor<StoreClass>
-): string {
+function classStoreName<
+  StoreClass extends Store<State, Actions>,
+  State,
+  Actions
+>(Class: ClassConstructor<StoreClass>): string {
   return Class.name;
 }
-function instanceStoreName<StoreClass extends Store<State>, State>(
-  This: StoreClass
-): string {
+function instanceStoreName<
+  StoreClass extends Store<State, Actions>,
+  State,
+  Actions
+>(This: StoreClass): string {
   return This.constructor.name;
 }
 
@@ -38,7 +42,10 @@ function instanceStoreName<StoreClass extends Store<State>, State>(
 
 class SimpleObjectState {
   static Instance: SimpleObjectState;
-  private Stores: Record<string, SimpleObjectStateStoreWrapper<any, any>> = {};
+  private Stores: Record<
+    string,
+    SimpleObjectStateStoreWrapper<any, any, any>
+  > = {};
   private debug: boolean;
 
   constructor() {
@@ -54,23 +61,74 @@ class SimpleObjectState {
     }
   }
 
+  public destroyStore = <
+    StoreClass extends Store<State, Actions>,
+    State,
+    Actions
+  >(
+    ref: string | StoreClass | ClassConstructor<StoreClass>
+  ) => {
+    const store = this.getWrapper<StoreClass, State, Actions>(ref);
+    if (store) {
+      store.destructor();
+    } else {
+      console.warn("Store ", ref, " was not available for creating!");
+    }
+  };
+
+
+  public getState = <
+    StoreClass extends Store<State, Actions>,
+    State,
+    Actions
+  >(
+    ref: string | StoreClass | ClassConstructor<StoreClass>
+  ) => {
+    const store = this.getStore<StoreClass, State, Actions>(ref);
+    if (store) {
+      return store.getState();
+    }
+  };
+
+  public createStore = <
+    StoreClass extends Store<State, Actions>,
+    State,
+    Actions
+  >(
+    ref: string | StoreClass | ClassConstructor<StoreClass>
+  ) => {
+    const wrapper = this.getWrapper<StoreClass, State, Actions>(ref);
+    if (wrapper) {
+        wrapper.create();
+    } else {
+      console.warn("Store ", ref, " was not available for creating!");
+    }
+  };
+
+  public callAction = <
+    StoreClass extends Store<State, Actions>,
+    State,
+    Actions
+  >(
+    ref: string | StoreClass | ClassConstructor<StoreClass>,
+    action: string,
+    ...args: any
+  ) => {
+    const store = this.getWrapper<StoreClass, State, Actions>(ref);
+    if (store) {
+      store.callAction(action, args);
+    } else {
+      console.warn("Store ", ref, " was not available for creating!");
+    }
+  };
+
   /** Sets debug mode where a stack will be built of state updates */
   public setDebug(value: boolean) {
     this.debug = value;
   }
 
-  /** Returns the Store Instance if one */
-  public getStore = <StoreClass extends Store<State>, State>(
-    ref: string | StoreClass | ClassConstructor<StoreClass>
-  ): StoreClass | undefined => {
-    const wrapper = this.getWrapper(ref);
-    if (wrapper) {
-      return wrapper.getInstance();
-    }
-  };
-
   /** Returns the Store Class if one */
-  public getClass = <StoreClass extends Store<State>, State>(
+  public getClass = <StoreClass extends Store<State, Actions>, State, Actions>(
     ref: string | StoreClass | ClassConstructor<StoreClass>
   ): ClassConstructor<StoreClass> | undefined => {
     const wrapper = this.getWrapper(ref);
@@ -81,8 +139,9 @@ class SimpleObjectState {
 
   /** Returns the Store Static Initial State if one */
   public getInitialState = <
-    StoreClass extends Store<State> & { InitialState: State },
-    State
+    StoreClass extends Store<State, Actions> & { InitialState: State },
+    State,
+    Actions
   >(
     ref: string | StoreClass | ClassConstructor<StoreClass>
   ): State | undefined => {
@@ -93,29 +152,33 @@ class SimpleObjectState {
   };
 
   /** Registers the Store, this will not actually instantiate the Store */
-  public register = <StoreClass extends Store<State>, State>(
+  public register = <StoreClass extends Store<State, Actions>, State, Actions>(
     Class: ClassConstructor<StoreClass>
   ) => {
     const store = this.addStoreByClass(Class);
     return store;
   };
 
-  public unregister = <StoreClass extends Store<State>, State>(
+  public unregister = <
+    StoreClass extends Store<State, Actions>,
+    State,
+    Actions
+  >(
     Class: ClassConstructor<StoreClass>
   ) => {
     if (this.Stores[classStoreName(Class)]) {
       const store = this.Stores[classStoreName(Class)];
       store.destructor();
-      delete this.Stores[classStoreName(Class)]
+      delete this.Stores[classStoreName(Class)];
     }
   };
 
   /** Subscribes a callback to a stores setState function */
-  public subscribe = <StoreClass extends Store<State>, State>(
+  public subscribe = <StoreClass extends Store<State, Actions>, State, Actions>(
     ref: string | StoreClass | ClassConstructor<StoreClass>,
     callback: ListenerCallback<State>
   ) => {
-    const store = this.getWrapper<StoreClass, State>(ref);
+    const store = this.getWrapper<StoreClass, State, Actions>(ref);
     if (store) {
       store.subscribe(callback);
     } else {
@@ -123,11 +186,15 @@ class SimpleObjectState {
     }
   };
 
-  public unsubscribe = <StoreClass extends Store<State>, State>(
+  public unsubscribe = <
+    StoreClass extends Store<State, Actions>,
+    State,
+    Actions
+  >(
     ref: string | StoreClass | ClassConstructor<StoreClass>,
     callback: ListenerCallback<State>
   ) => {
-    const store = this.getWrapper<StoreClass, State>(ref);
+    const store = this.getWrapper<StoreClass, State, Actions>(ref);
     if (store) {
       store.unsubscribe(callback);
     } else {
@@ -136,7 +203,11 @@ class SimpleObjectState {
   };
 
   /** Called by the Store when it sets its own state to call all subscribers */
-  public onSetState = <StoreClass extends Store<State>, State>(
+  public onSetState = <
+    StoreClass extends Store<State, Actions>,
+    State,
+    Actions
+  >(
     This: StoreClass
   ) => {
     if (this.debug) {
@@ -145,7 +216,7 @@ class SimpleObjectState {
       );
       console.log("Store -", This);
       console.log("New State -", This.getState());
-      console.groupCollapsed('Stack Trace');
+      console.groupCollapsed("Stack Trace");
       console.trace(); // hidden in collapsed group
       console.groupEnd();
       console.groupEnd();
@@ -154,10 +225,24 @@ class SimpleObjectState {
     wrapper.onSetState();
   };
 
+  /** Returns the Store Instance if one */
+  public getStore = <StoreClass extends Store<State, Actions>, State, Actions>(
+    ref: string | StoreClass | ClassConstructor<StoreClass>
+  ): StoreClass | undefined => {
+    const wrapper = this.getWrapper(ref);
+    if (wrapper) {
+      return wrapper.getInstance();
+    }
+  };
+
   /** Private  */
 
   /** Returns the Store Class if one */
-  private getString = <StoreClass extends Store<State>, State>(
+  private getString = <
+    StoreClass extends Store<State, Actions>,
+    State,
+    Actions
+  >(
     ref: string | StoreClass | ClassConstructor<StoreClass>
   ): string | undefined => {
     if (isString(ref)) {
@@ -170,24 +255,31 @@ class SimpleObjectState {
   };
 
   /** Returns the Store Wrapper if on or creates if ref is a Class */
-  private getWrapper = <StoreClass extends Store<State>, State>(
+  private getWrapper = <
+    StoreClass extends Store<State, Actions>,
+    State,
+    Actions
+  >(
     ref: string | StoreClass | ClassConstructor<StoreClass>
-  ): SimpleObjectStateStoreWrapper<State, StoreClass> | undefined => {
+  ): SimpleObjectStateStoreWrapper<StoreClass, State, Actions> | undefined => {
     const storeString = this.getString(ref);
     if (storeString) {
       return this.Stores[storeString];
     } else {
-        console.warn('Store has not been registered')
+      console.warn("Store has not been registered");
     }
   };
 
-  private addStoreByClass<StoreClass extends Store<State>, State>(
-    Class: ClassConstructor<StoreClass>
-  ) {
+  private addStoreByClass<
+    StoreClass extends Store<State, Actions>,
+    State,
+    Actions
+  >(Class: ClassConstructor<StoreClass>) {
     if (!this.Stores[classStoreName(Class)]) {
       this.Stores[classStoreName(Class)] = new SimpleObjectStateStoreWrapper<
+        StoreClass,
         State,
-        StoreClass
+        Actions
       >(Class);
     }
     return this.Stores[classStoreName(Class)];
