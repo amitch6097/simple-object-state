@@ -40,11 +40,12 @@ export class Store<State, Actions> {
   }
 
   protected shouldStoreUpdate(nextState?: State): boolean {
-    if(nextState) {
+    if (nextState) {
         const state = this.state;
         const isEqual = shallowEqual({nextState, state});
+        return !isEqual;
     }
-    return !isEqual;
+    return false;
   }
 
   protected setState(nextState: Partial<State>) {
