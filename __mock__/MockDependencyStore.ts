@@ -1,4 +1,4 @@
-import {Store, register, subscribe, callAction, unsubscribe} from '../../src/index';
+import {Store, register, subscribe, callAction, unsubscribe} from '../src/index';
 import MockStore, {IMockStoreState} from './MockStore';
 
 export interface IMockDependencyStoreState {

@@ -1,7 +1,7 @@
-import { createStore, destroyStore, subscribe, unsubscribe, getState, callAction} from '../src/index';
-import {SimpleObjectState} from '../src/SimpleObjectState';
+import { createStore, destroyStore, subscribe, unsubscribe, getState, callAction} from '../../src/index';
+import {SimpleObjectState} from '../../src/SimpleObjectState';
 
-import MockClassAsStateStore from './mock/MockClassAsStateStore'
+import MockClassAsStateStore from '../../__mock__/MockStoreUseClass'
 
 beforeEach(() => {
     destroyStore(MockClassAsStateStore);

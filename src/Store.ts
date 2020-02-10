@@ -1,4 +1,5 @@
 import { SimpleObjectState } from "./SimpleObjectState";
+import { shallowEqual } from "./ShallowEqual";
 
 export class Store<State, Actions> {
   protected state: State;
@@ -31,15 +32,18 @@ export class Store<State, Actions> {
   }
 
   protected storeDidCallAction(action: string) {
-      return;
+    return;
   }
 
   protected storeDidUpdate(prevState: State) {
     return;
   }
 
-  protected shouldStoreUpdate(nextState: State): boolean {
-    const isEqual = shallowEqual(nextState, this.state);
+  protected shouldStoreUpdate(nextState?: State): boolean {
+    if(nextState) {
+        const state = this.state;
+        const isEqual = shallowEqual({nextState, state});
+    }
     return !isEqual;
   }
 
@@ -59,17 +63,4 @@ export class Store<State, Actions> {
     SimpleObjectState.onSetState(this);
     this.storeDidUpdate(prevState);
   }
-}
-
-/** Compares the states and returns false if they are not equal, or true if they are */
-function shallowEqual(
-  nextState: Record<string, any>,
-  state: Record<string, any>
-): boolean {
-  for (let key in nextState) {
-    if (nextState[key] !== state[key]) {
-      return false;
-    }
-  }
-  return true;
 }

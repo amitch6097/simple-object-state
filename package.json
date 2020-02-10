@@ -61,7 +61,7 @@
         "json"
     ],
     "testMatch": [
-        "<rootDir>__tests__/*.(ts|tsx|js|jsx)"
+        "<rootDir>__tests__/**/*.(ts|tsx|js|jsx)"
     ],
     "testPathIgnorePatterns": [
         "<rootDir>/__tests__/mock/",

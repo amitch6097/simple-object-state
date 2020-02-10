@@ -1,4 +1,4 @@
-import {Store, register} from '../../src/index';
+import {Store, register} from '../src/index';
 
 export interface IMockStoreState {
     count: number;

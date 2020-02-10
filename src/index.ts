@@ -9,7 +9,6 @@ export const callAction = SimpleObjectState.callAction;
 export const createStore = SimpleObjectState.createStore;
 export const destroyStore = SimpleObjectState.destroyStore;
 export const getState = SimpleObjectState.getState;
-export const getStore = SimpleObjectState.getStore;
 
 
 
