@@ -21,7 +21,7 @@ export class Store<State, Actions> {
   public getState(): State {
     return this.state;
   }
-
+  
   public callAction(action: string, args: any) {
     const actions: any = this.actions;
     if (this.actions && action && actions[action]) {

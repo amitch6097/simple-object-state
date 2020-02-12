@@ -76,8 +76,16 @@ class SimpleObjectState {
     }
   };
 
+  public getState = <StoreClass extends Store<State, Actions>, State, Actions>(
+    ref: string | StoreClass | ClassConstructor<StoreClass>
+  ) => {
+    const store = this.getStore<StoreClass, State, Actions>(ref);
+    if (store) {
+      return store.getState();
+    }
+  };
 
-  public getState = <
+  public getActions = <
     StoreClass extends Store<State, Actions>,
     State,
     Actions
@@ -86,7 +94,7 @@ class SimpleObjectState {
   ) => {
     const store = this.getStore<StoreClass, State, Actions>(ref);
     if (store) {
-      return store.getState();
+      return store.getActions();
     }
   };
 
@@ -99,7 +107,7 @@ class SimpleObjectState {
   ) => {
     const wrapper = this.getWrapper<StoreClass, State, Actions>(ref);
     if (wrapper) {
-        wrapper.create();
+      wrapper.create();
     } else {
       console.warn("Store ", ref, " was not available for creating!");
     }
