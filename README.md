@@ -126,4 +126,4 @@ unregister(CounterStore);
 
 ```
 
-check it out here [CodeSandbox](https://codesandbox.io/s/serene-gauss-1cuk6)
+check it out here [CodeSandbox](https://codesandbox.io/s/simple-object-state-just-js-example-itc61)
