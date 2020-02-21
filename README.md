@@ -12,7 +12,7 @@ installed and run:
     
 ## The Gist
 
-The state of your app is stored in multiple singleton store classes, which inherit from the Store class.  A store is setup by registering it with simple-object-state.  From there on, the state of the Store can by changed by calling setState, which is inherited from the Store Class, much like React.Component.  You listen to state changes of a single store, the subscribe() function is used, with arguments of the store and the function to call.  The same is done with unsubscribe(). Function can be set in the store as actions, which will then be avaible for outside store use through callAction. Finally a store is destroyed using unregister, which will remove a listeners, if there are any left around, and from then on the store will not be available.  
+The state of your app is stored in multiple singleton store classes, which inherit from the Store class.  A store is setup by registering it with simple-object-state.  From there on, the state of the Store can by changed by calling setState, which is inherited from the Store Class, much like React.Component.  You listen to state changes of a single store, the subscribe() function is used, with arguments of the store and the function to call.  The same is done with unsubscribe(). Function can be set in the store as actions, which will then be avaible for outside store use through callAction. Finally a store is destroyed using unregister, which will remove listeners, if there are any left around, and from then on the store will not be available.  
 
 
 That's it!
