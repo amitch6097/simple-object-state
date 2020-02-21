@@ -96,7 +96,7 @@ function printCount(state: ICounterStoreState) {
 }
 subscribe(CounterStore, printCount);
 
-console.log("Prints will no happen on state changes", getState(CounterStore));
+console.log("Prints will not happen on state changes", getState(CounterStore));
 
 // again update the state of store, but this time we subscribed so updates will be printed to the console
 callAction(CounterStore, "increment");
