@@ -34,9 +34,14 @@ interface ICounterStoreState {
   count: number;
 }
 
+enum CounterStoreAction {
+  INCREMENT = "increment",
+  DECREMENT = "decrement"
+}
+
 interface ICounterStoreActions {
-  increment: () => void;
-  decrement: () => void;
+  [CounterStoreAction.INCREMENT]: () => void;
+  [CounterStoreAction.DECREMENT]: () => void;
 }
 
 class CounterStore extends Store<ICounterStoreState, ICounterStoreActions> {
@@ -85,7 +90,7 @@ createStore(CounterStore);
 
 console.log("Store is now ready for updates.", getState(CounterStore));
 
-callAction(CounterStore, "increment");
+callAction(CounterStore, CounterStoreAction.INCREMENT);
 // count state is now at 1!
 
 console.log("Store is now ready for updates.", getState(CounterStore));
@@ -99,18 +104,18 @@ subscribe(CounterStore, printCount);
 console.log("Prints will not happen on state changes", getState(CounterStore));
 
 // again update the state of store, but this time we subscribed so updates will be printed to the console
-callAction(CounterStore, "increment");
+callAction(CounterStore, CounterStoreAction.INCREMENT);
 // count: 2
-callAction(CounterStore, "decrement");
+callAction(CounterStore, CounterStoreAction.DECREMENT);
 // count: 1
-callAction(CounterStore, "increment");
+callAction(CounterStore, CounterStoreAction.INCREMENT);
 // count: 2
 
 // unsubscribing from the store will remove the call to console.log on store updates, but still update the state
 unsubscribe(CounterStore, printCount);
 
 // this will stil update the state of the store
-callAction(CounterStore, "decrement");
+callAction(CounterStore, CounterStoreAction.DECREMENT);
 console.log("Store can still be updated.", getState(CounterStore)); // state will be 1
 
 // destroying the Store the store will will remove its instance and call destructor() and destory the state of the store
