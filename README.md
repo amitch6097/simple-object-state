@@ -2,6 +2,8 @@
 
 An experiemental object oriented state mangment lib
 
+[![npm version](https://img.shields.io/npm/v/simple-object-state.svg?style=flat-square)](https://www.npmjs.com/package/simple-object-state.)
+[![npm downloads](https://img.shields.io/npm/dm/simple-object-state.svg?style=flat-square)](https://www.npmjs.com/package/simple-object-state.)
 
 ### Installation
 
